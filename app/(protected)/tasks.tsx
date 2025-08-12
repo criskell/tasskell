@@ -60,6 +60,11 @@ export default function TaskListScreen() {
   };
 
   const removeItem = (id: string) => {
+    if (id === editingId) {
+      setTitle("");
+      setEditingId(null);
+    }
+
     remove(ref(db, `tasks/${user.uid}/${id}`));
   };
 
