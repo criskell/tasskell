@@ -1,6 +1,6 @@
 import { useAuth } from "@/providers/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Stack } from "expo-router";
+import { Link, Stack } from "expo-router";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import {
   Button,
@@ -73,6 +73,7 @@ export default function SignUpScreen() {
         )}
 
         <Button title="Registrar" onPress={handleSubmit(onSignUp)} />
+        <Link href="/auth/sign-in">Entrar</Link>
       </View>
     </SafeAreaView>
   );
