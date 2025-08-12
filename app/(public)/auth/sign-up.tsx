@@ -1,7 +1,6 @@
-import { auth } from "@/lib/firebase";
+import { useAuth } from "@/providers/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Stack } from "expo-router";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import {
   Button,
@@ -21,6 +20,8 @@ const signUpSchema = z.object({
 type SignUpSchema = z.infer<typeof signUpSchema>;
 
 export default function SignUpScreen() {
+  const { signUp, user } = useAuth();
+
   const {
     control,
     handleSubmit,
@@ -30,13 +31,7 @@ export default function SignUpScreen() {
   });
 
   const onSignUp: SubmitHandler<SignUpSchema> = async (data) => {
-    console.log("auth data", data);
-
-    const response = await createUserWithEmailAndPassword(
-      auth,
-      data.email,
-      data.password
-    );
+    const response = await signUp(data);
 
     console.log("response", response);
   };
@@ -65,7 +60,12 @@ export default function SignUpScreen() {
           control={control}
           name="password"
           render={({ field }) => (
-            <TextInput {...field} style={styles.input} placeholder="Senha" />
+            <TextInput
+              {...field}
+              style={styles.input}
+              placeholder="Senha"
+              secureTextEntry
+            />
           )}
         />
         {errors.password && (
