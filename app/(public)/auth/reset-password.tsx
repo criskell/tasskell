@@ -12,28 +12,27 @@ import {
 } from "react-native";
 import * as z from "zod";
 
-const signInSchema = z.object({
+const resetPasswordSchema = z.object({
   email: z.string(),
-  password: z.string(),
 });
 
-type SignInSchema = z.infer<typeof signInSchema>;
+type ResetPasswordSchema = z.infer<typeof resetPasswordSchema>;
 
-export default function SignInScreen() {
-  const { signIn } = useAuth();
+export default function ResetPasswordScreen() {
+  const { resetPassword } = useAuth();
 
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(signInSchema),
+    resolver: zodResolver(resetPasswordSchema),
   });
 
-  const onSignIn: SubmitHandler<SignInSchema> = async (data) => {
-    console.log("auth data", data);
+  const onSignIn: SubmitHandler<ResetPasswordSchema> = async (data) => {
+    console.log("reset password data", data);
 
-    const response = await signIn(data);
+    const response = await resetPassword(data.email);
 
     console.log("response", response);
   };
@@ -42,7 +41,7 @@ export default function SignInScreen() {
     <SafeAreaView>
       <Stack.Screen
         options={{
-          title: "Entrar",
+          title: "Resetar senha",
         }}
       />
 
@@ -57,26 +56,8 @@ export default function SignInScreen() {
         {errors.email && (
           <Text style={styles.errorText}>{errors.email.message}</Text>
         )}
-
-        <Controller
-          control={control}
-          name="password"
-          render={({ field }) => (
-            <TextInput
-              {...field}
-              style={styles.input}
-              placeholder="Senha"
-              secureTextEntry
-            />
-          )}
-        />
-        {errors.password && (
-          <Text style={styles.errorText}>{errors.password.message}</Text>
-        )}
-
-        <Button title="Entrar" onPress={handleSubmit(onSignIn)} />
-        <Link href="/auth/sign-up">Criar conta</Link>
-        <Link href="/auth/reset-password">Esqueci minha senha</Link>
+        <Button title="Resetar senha" onPress={handleSubmit(onSignIn)} />
+        <Link href="/auth/sign-in">Entrar</Link>
       </View>
     </SafeAreaView>
   );

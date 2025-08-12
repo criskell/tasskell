@@ -2,6 +2,7 @@ import { auth } from "@/lib/firebase";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   User,
   UserCredential,
@@ -23,6 +24,7 @@ export type AuthContext = {
   user: User | null;
   signUp: (data: AuthenticationParams) => Promise<UserCredential>;
   signIn: (data: AuthenticationParams) => Promise<UserCredential>;
+  resetPassword: (email: string) => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContext | null>(null);
@@ -64,6 +66,14 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     }
   };
 
+  const resetPassword = async (email: string) => {
+    try {
+      return await sendPasswordResetEmail(auth, email);
+    } catch (error) {
+      throw new Error("Reset password failed: ", { cause: error });
+    }
+  };
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       setUser(user);
@@ -76,6 +86,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         user,
         signUp,
         signIn,
+        resetPassword,
       }}
     >
       {children}

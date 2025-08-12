@@ -5,6 +5,7 @@ export default function PublicLayout() {
     <Stack>
       <Stack.Screen name="auth/sign-in" />
       <Stack.Screen name="auth/sign-up" />
+      <Stack.Screen name="auth/reset-password" />
     </Stack>
   );
 }
